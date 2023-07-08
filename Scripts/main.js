@@ -2,32 +2,40 @@ const NUM_MONTHS_IN_YEAR = 12;
 const SPACE_CHAR = ' '; 
 const LANG = "en";
 const DEBUG = false;
-const AMORTIZATION_TABLE_HEADERS = ["MONTH", "STARTING AMOUNT", "ENDING AMOUNT", "INTEREST PAID", "PRINCIPAL PAID", "TOTAL PAID"];
+const AMORTIZATION_TABLE_HEADERS = ["MONTH", "PAYMENT", "STARTING AMOUNT", "ENDING AMOUNT", "INTEREST PAID", "PRINCIPAL PAID", "TOTAL PAID", "IS THIS RIGHT?!"];
 
 // Calculates and returns an array of elements representing months until the loan is paid 
+// TODO: Figure out why the freak this doesn't look right -> I don't think the calculations are valid
+// TODO: Figure out how to assign the right values as you go down the rows 
+//          -> Total paid is wrong on the last line because the last amount won't be the same as the regular payment
+//              - There WILL be a remainder in almost all cases
 function createAmortizationTable(startingAmount, payment, interestRate) {
     let amortizationArr = [];
     let totalPaid = 0;
 
     amortizationArr.push({
         interestAmount: 0,
+        payment: 0,
         principalPayment: 0,
         monthStartingAmount: startingAmount, 
         monthEndAmount: startingAmount,
-        totalPaid: totalPaid
+        totalPaid: totalPaid,
+        isThisRight: false
     })
 
     while (startingAmount > 0) {
         let interestAmount = calculateMonthlyInterest(startingAmount, interestRate);
         let principalPayment = payment - interestAmount;
         let afterPaymentAmount = startingAmount + interestAmount - payment;
-        totalPaid += startingAmount - afterPaymentAmount;
+        totalPaid += payment;
         amortizationArr.push({
             interestAmount: interestAmount,
+            payment: payment,
             principalPayment: principalPayment,
             monthStartingAmount: startingAmount,
             monthEndAmount: afterPaymentAmount > 0 ? afterPaymentAmount : 0,
-            totalPaid: totalPaid
+            totalPaid: totalPaid, 
+            isThisRight: interestAmount + principalPayment == payment // TODO: remove this
         });
         startingAmount = afterPaymentAmount;
     }
@@ -53,7 +61,7 @@ function logDebug (toLog) {
 
 // TODO: remove below here
 function padValueWithSpaces(value, numOfSpaces) {
-    let stringRepOfVal = value.toLocaleString("en");
+    let stringRepOfVal = value.toLocaleString(LANG);
     // logDebug(`>> ${stringRepOfVal} ${numOfSpaces} ${stringRepOfVal.length}`); 
     if (stringRepOfVal.length >= numOfSpaces) {
         return stringRepOfVal;
@@ -100,8 +108,8 @@ function generateTextRepresentationOfTable() {
     }
 }
 
-function generateHTMLRepresentationOfTable() {
-    let amortArr = createAmortizationTable(50000, 600, 4);
+function generateHTMLRepresentationOfTable(startingBalance, payment, interestRate) {
+    let amortArr = createAmortizationTable(startingBalance, payment, interestRate);
     let amortTableDiv = document.getElementById("amortizationTable");
     let amortTable = document.createElement("table");
 
@@ -122,12 +130,14 @@ function generateHTMLRepresentationOfTable() {
         let month = amortArr[i];
         let newRow = document.createElement("tr");
         let fields = [
-            padValueWithSpaces(i, 15),
-            padValueWithSpaces(month.monthStartingAmount,15),
-            padValueWithSpaces(month.monthEndAmount,15),
-            padValueWithSpaces(month.interestAmount, 15),
-            padValueWithSpaces(month.principalPayment, 15),
-            padValueWithSpaces(month.totalPaid, 15)
+            i,
+            month.payment.toLocaleString(LANG),
+            month.monthStartingAmount.toLocaleString(LANG),
+            month.monthEndAmount.toLocaleString(LANG),
+            month.interestAmount.toLocaleString(LANG),
+            month.principalPayment.toLocaleString(LANG),
+            month.totalPaid.toLocaleString(LANG),
+            month.isThisRight.toString()
         ];
 
         for (let i in fields) {
@@ -144,4 +154,4 @@ function generateHTMLRepresentationOfTable() {
 
 // ##### RUN TESTS HERE #####
 // generateTextRepresentationOfTable();
-generateHTMLRepresentationOfTable(); 
+generateHTMLRepresentationOfTable(5000, 200, 20); 
