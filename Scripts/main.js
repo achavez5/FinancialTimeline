@@ -2,7 +2,7 @@ const NUM_MONTHS_IN_YEAR = 12;
 const SPACE_CHAR = ' '; 
 const LANG = "en";
 const DEBUG = false;
-const AMORTIZATION_TABLE_HEADERS = ["MONTH", "PAYMENT", "STARTING AMOUNT", "ENDING AMOUNT", "INTEREST PAID", "PRINCIPAL PAID", "TOTAL PAID", "IS THIS RIGHT?!"];
+const AMORTIZATION_TABLE_HEADERS = ["MONTH", "PAYMENT", "STARTING AMOUNT", "ENDING AMOUNT", "INTEREST PAID", "PRINCIPAL PAID", "TOTAL PAID"];
 
 // Calculates and returns an array of elements representing months until the loan is paid 
 // TODO: Figure out why the freak this doesn't look right -> I don't think the calculations are valid
@@ -10,12 +10,11 @@ const AMORTIZATION_TABLE_HEADERS = ["MONTH", "PAYMENT", "STARTING AMOUNT", "ENDI
 //          -> Total paid is wrong on the last line because the last amount won't be the same as the regular payment
 //              - There WILL be a remainder in almost all cases
 function createAmortizationTable(startingAmount, payment, interestRate) {
-    let amortizationArr = [];
+    let amortizationArr = []; // stores rows of 
     let totalPaid = 0;
 
     amortizationArr.push({
         interestAmount: 0,
-        payment: 0,
         principalPayment: 0,
         monthStartingAmount: startingAmount, 
         monthEndAmount: startingAmount,
@@ -28,15 +27,16 @@ function createAmortizationTable(startingAmount, payment, interestRate) {
         let principalPayment = payment - interestAmount;
         let afterPaymentAmount = startingAmount + interestAmount - payment;
         totalPaid += payment;
-        amortizationArr.push({
+        let rowInfo = {
             interestAmount: interestAmount,
-            payment: payment,
             principalPayment: principalPayment,
             monthStartingAmount: startingAmount,
             monthEndAmount: afterPaymentAmount > 0 ? afterPaymentAmount : 0,
-            totalPaid: totalPaid, 
-            isThisRight: interestAmount + principalPayment == payment // TODO: remove this
-        });
+            totalPaid: totalPaid
+        };
+
+        amortizationArr.push(rowInfo);
+
         startingAmount = afterPaymentAmount;
     }
     return amortizationArr;
@@ -62,7 +62,6 @@ function logDebug (toLog) {
 // TODO: remove below here
 function padValueWithSpaces(value, numOfSpaces) {
     let stringRepOfVal = value.toLocaleString(LANG);
-    // logDebug(`>> ${stringRepOfVal} ${numOfSpaces} ${stringRepOfVal.length}`); 
     if (stringRepOfVal.length >= numOfSpaces) {
         return stringRepOfVal;
     }
@@ -113,6 +112,7 @@ function generateHTMLRepresentationOfTable(startingBalance, payment, interestRat
     let amortTableDiv = document.getElementById("amortizationTable");
     let amortTable = document.createElement("table");
 
+    // generate header row for the table
     function getAmortizationTableHeader() {
         let headerRow = document.createElement("tr");
         for (let i in AMORTIZATION_TABLE_HEADERS) {
@@ -129,15 +129,15 @@ function generateHTMLRepresentationOfTable(startingBalance, payment, interestRat
     for (let i in amortArr) { 
         let month = amortArr[i];
         let newRow = document.createElement("tr");
+        console.log(typeof i, i);
         let fields = [
-            i,
-            month.payment.toLocaleString(LANG),
-            month.monthStartingAmount.toLocaleString(LANG),
+            i == 0 ? "LOAN START" : i, // month
+            i == 0 ? 0 : payment.toLocaleString(LANG),
+            month.monthStartingAmount.toLocaleString(LANG), 
             month.monthEndAmount.toLocaleString(LANG),
             month.interestAmount.toLocaleString(LANG),
             month.principalPayment.toLocaleString(LANG),
-            month.totalPaid.toLocaleString(LANG),
-            month.isThisRight.toString()
+            month.totalPaid.toLocaleString(LANG)
         ];
 
         for (let i in fields) {
