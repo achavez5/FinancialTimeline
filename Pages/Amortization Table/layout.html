@@ -2,7 +2,8 @@
 <header lang="en">
     <meta charset="UTF-8">
     <title>Financial Timeline</title>
-    <link rel="stylesheet" href="../Styles/main.css">
+    <link rel="stylesheet" href="../../main.css">
+    <link rel="stylesheet" href="./styles.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Roboto">
     <style>
@@ -10,11 +11,12 @@
             font-family: Roboto, serif;
         }
     </style> 
+    <link rel="icon" type="image/x-icon" href="../../Images/Heading/">
     <meta display="flex">
 </header>
 <body>
     <header>
-        <a href-"../index.html"><img id="logo" src="../Images/Heading/Chavez_development.jpg"></a>
+        <a href="../Home Screen/layout.html"><img id="logo" src="../../Images/Heading/Chavez_development.jpg"></a>
         <h1>Amortization Table</h1>
         <nav>
             <ul>
@@ -23,6 +25,7 @@
             </ul>
         </nav>
     </header>
+    <section class="heading-spacer"><section>
     <form method="post" class="submissions">
         <fieldset class="inputSection" id="inputSection">
             <label id="loan-amount">Loan amount:<input type="number" required name="loan-amount" id="loan-amount" for="loan-amount" min="0" step="0.01" placeholder="100,000"></label>
@@ -33,6 +36,6 @@
     </form>
     <section class="tableSection" id="tableSection">
         <div id="amortizationTable"></div>
-        <script src="../Scripts/main.js"></script>
+        <script src="./script.js"></script>
     </section>
 </body>

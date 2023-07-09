@@ -129,7 +129,6 @@ function generateHTMLRepresentationOfTable(startingBalance, payment, interestRat
     for (let i in amortArr) { 
         let month = amortArr[i];
         let newRow = document.createElement("tr");
-        console.log(typeof i, i);
         let fields = [
             i == 0 ? "LOAN START" : i, // month
             i == 0 ? 0 : payment.toLocaleString(LANG),
