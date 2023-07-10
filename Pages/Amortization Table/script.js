@@ -3,6 +3,7 @@ const SPACE_CHAR = ' ';
 const LANG = "en";
 const DEBUG = false;
 const AMORTIZATION_TABLE_HEADERS = ["MONTH", "PAYMENT", "STARTING AMOUNT", "ENDING AMOUNT", "INTEREST PAID", "PRINCIPAL PAID", "TOTAL PAID"];
+const MAX_NUMBER_OF_MONTHS = 360; // sucks if someone wants to take out more than a 30 year loan
 
 // Calculates and returns an array of elements representing months until the loan is paid 
 function createAmortizationTable(startingAmount, payment, interestRate, tableId) {
@@ -37,7 +38,7 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
     }
     function calculateMonthlyInterest(amount, interestRate) {
         let notRoundedInterest = ((interestRate / 100) / NUM_MONTHS_IN_YEAR) * amount;
-        let roundedInterest = Math.round(notRoundedInterest * 100) / 100; // round to two decimals
+        let roundedInterest = (Math.round(((notRoundedInterest + Number.EPSILON) * 100))) / 100; // round to two decimals
         return roundedInterest;  
     }
 
@@ -57,11 +58,11 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
 
     // generate the rest of the table
     let monthCount = 1;
-    while (startingAmount > 0 && monthCount < 500) {
-        let monthPayment = startingAmount < payment ? startingAmount : payment; // if starting amount < payment -> we're not going to make a full payment
+    while (startingAmount > 0 && monthCount < MAX_NUMBER_OF_MONTHS) {
         let interestAmount = calculateMonthlyInterest(startingAmount, interestRate);
+        let monthPayment = startingAmount + interestAmount <= payment ? startingAmount + interestAmount : payment; // if starting amount < payment -> we're not going to make a full payment
         let principalPayment = monthPayment - interestAmount;
-        let afterPaymentAmount = startingAmount + interestAmount - monthPayment;
+        let afterPaymentAmount = startingAmount + interestAmount - payment;
         totalPaid += monthPayment;
         
         let row = createAmortTableRow(monthCount, monthPayment, startingAmount, afterPaymentAmount > 0 ? afterPaymentAmount : 0, interestAmount, principalPayment, totalPaid);
