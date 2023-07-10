@@ -1,10 +1,16 @@
+/** AMORTIZATION TABLE */
+
 .inputSection, .tableSection {
-    margin: 2em;
+    margin: 2rem;
+}
+
+.tableSection {
+    padding-bottom: 2rem;
 }
 
 fieldset {
     border: none; 
-    padding: 2em 0;
+    padding: 2rem 0;
 }
 
 label {
@@ -16,9 +22,10 @@ input {
     margin: 10px 0 0 0;
     width: 100%;
     min-height: 2em;
-    background-color: #FFF; 
-    border: 1px solid #FFF;
-    color: #FFF;
+    background-color: #ecf0f1; 
+    border: 1px solid #ecf0f1;
+    color: #2c3e50;
+    border-radius: 2px;
 }
 
 input[type="submit"] {
@@ -27,17 +34,31 @@ input[type="submit"] {
     margin: 1em auto;
     height: 2em;
     font-size: 1.1rem;
-    background-color: #2980b9;
-    border-color: #2980b9;
+    background-color: #3498db;
+    border-color: #3498db;
     min-width: 300px;
     border-radius: 2px;
+    color: #ecf0f1;
+}
+
+input[type="submit"]:hover {
+    background-color: #2980b9;
 }
 
 .submissions {
     width: 60vw; 
     max-width: 500px; 
     min-width: 300px;
-    margin: 0 auto; 
+}
+
+#amortization-table {
+    width: 80vw; 
+    max-width: 95%; 
+    min-width: 500px;
+}
+
+.submissions, #amortization-table {
+    margin: 0 auto;
 }
 
 td, th {
@@ -46,6 +67,7 @@ td, th {
     background-color: #34495e; 
     margin: 0;
     /* border-radius: 3px; */
+    text-justify: right;
 }
 
 td:first-of-type, th:first-of-type {
