@@ -31,9 +31,8 @@ header {
 }
 
 #logo {
-    width: max(100px, 7vw);
-    aspect-ratio: 400 / 100;
-    padding: 0 0.4rem;
+    width: max(50px, 2vw);
+    padding: 0 0.5rem;
 }
 
 h1 {
