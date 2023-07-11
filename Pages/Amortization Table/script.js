@@ -4,6 +4,11 @@ const LANG = "en";
 const DEBUG = false;
 const AMORTIZATION_TABLE_HEADERS = ["MONTH", "PAYMENT", "STARTING AMOUNT", "ENDING AMOUNT", "INTEREST PAID", "PRINCIPAL PAID", "TOTAL PAID"];
 const MAX_NUMBER_OF_MONTHS = 360; // sucks if someone wants to take out more than a 30 year loan
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
+
 
 // Calculates and returns an array of elements representing months until the loan is paid 
 function createAmortizationTable(startingAmount, payment, interestRate, tableId) {
@@ -26,13 +31,13 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
         
         let newRow = document.createElement("tr");
 
-        newRow.appendChild(createRowData(month && month > 0 ? month.toLocaleString(LANG) : "LOAN START")); 
-        newRow.appendChild(createRowData((rowPayment || 0).toLocaleString(LANG)));
-        newRow.appendChild(createRowData((rowStartingAmount || 0).toLocaleString(LANG))); 
-        newRow.appendChild(createRowData((rowEndingAmount || 0).toLocaleString(LANG)));
-        newRow.appendChild(createRowData((rowInterestPaid || 0).toLocaleString(LANG)));
-        newRow.appendChild(createRowData((rowPrincipalPaid || 0).toLocaleString(LANG)));
-        newRow.appendChild(createRowData((totalPaid || 0).toLocaleString(LANG)));
+        newRow.appendChild(createRowData(month && month > 0 ? month : "LOAN START")); 
+        newRow.appendChild(createRowData(formatter.format(rowPayment || 0)));
+        newRow.appendChild(createRowData(formatter.format(rowStartingAmount || 0))); 
+        newRow.appendChild(createRowData(formatter.format(rowEndingAmount || 0)));
+        newRow.appendChild(createRowData(formatter.format(rowInterestPaid || 0)));
+        newRow.appendChild(createRowData(formatter.format(rowPrincipalPaid || 0)));
+        newRow.appendChild(createRowData(formatter.format(totalPaid || 0)));
     
         return newRow;
     }
