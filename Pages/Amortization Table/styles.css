@@ -63,11 +63,12 @@ input[type="submit"]:hover {
 
 td, th {
     width: 200rem;
-    /* border: 2px solid #95a5a6; */
     background-color: #34495e; 
     margin: 0;
-    /* border-radius: 3px; */
-    text-justify: right;
+}
+
+td {
+    text-align: right;
 }
 
 td:first-of-type, th:first-of-type {
