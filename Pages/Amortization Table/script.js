@@ -118,5 +118,3 @@ form.addEventListener("submit", function (e) {
 
     createAmortizationTable(parseFloat(dataDict["loan-amount"]), parseFloat(dataDict["payment-amount"]), parseFloat(dataDict["interest-rate"]), "amortization-table");
 });
-
-Log.Warn(getPaymentAmount(400000, 5, 30 * NUM_MONTHS_IN_YEAR));
