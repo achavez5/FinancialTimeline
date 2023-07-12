@@ -82,6 +82,24 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
     return true;
 }
 
+// p = principal 
+// i = interest rate / 100
+// n = number of payments per term (normally months in year)
+// t = number of periods (term length is usually measured in years)
+//
+//Formula: 
+//        p * ( i / n )
+// ____________________________
+// 1 - (1 + ( i / n ))^-(n * t)
+//
+function getPaymentAmount(principalPayment, interestRate, termLengthInMonths) {
+    let monthlyInterestRate = (interestRate / 100) / NUM_MONTHS_IN_YEAR; 
+    let numerator = principalPayment * monthlyInterestRate;
+    let denominator = (1.0 - Math.pow(1.0 + monthlyInterestRate, -(termLengthInMonths)));
+    
+    return Helpers.Math.Round(numerator / denominator, 2);
+}
+
 // ##### RUN PART #####
 
 Log.Info("Setting submission listener on the Amortization table app.");
@@ -100,3 +118,5 @@ form.addEventListener("submit", function (e) {
 
     createAmortizationTable(parseFloat(dataDict["loan-amount"]), parseFloat(dataDict["payment-amount"]), parseFloat(dataDict["interest-rate"]), "amortization-table");
 });
+
+Log.Warn(getPaymentAmount(400000, 5, 30 * NUM_MONTHS_IN_YEAR));
