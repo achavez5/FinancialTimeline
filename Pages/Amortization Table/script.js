@@ -54,6 +54,7 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
 
     // clear the table so that many aren't stacked above each other
     amortTableDiv.innerHTML = "";
+    amortTableDiv.style.display = "block";
 
     // insert the header row
     amortTable.appendChild(getAmortizationTableHeader());    
