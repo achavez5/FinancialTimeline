@@ -37,7 +37,7 @@ header {
     align-self: start;
 }
 
-h1 {
+#heading {
     font-size: min(5vw, 1.2em);
     text-align: center;
     margin: 0 auto;
