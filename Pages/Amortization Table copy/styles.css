@@ -1,0 +1,91 @@
+/** AMORTIZATION TABLE */
+
+.inputSection, .tableSection {
+    margin: 2rem;
+}
+
+.tableSection {
+    padding-top: 25px;
+    padding-bottom: 2rem;
+}
+
+fieldset {
+    border: none; 
+    padding: 2rem 0;
+}
+
+label {
+    display: block;
+    margin: 0.5rem 0;
+}
+
+input, select {
+    margin: 10px 0 0 0;
+    width: 100%;
+    min-height: 2em;
+    background-color: #ecf0f1; 
+    border: 1px solid #ecf0f1;
+    color: #2c3e50;
+    border-radius: 2px;
+}
+
+input[type="submit"] {
+    display: block;
+    width: 60%;
+    margin: 1em auto;
+    height: 2em;
+    font-size: 1.1rem;
+    background-color: #3498db;
+    border-color: #3498db;
+    min-width: 300px;
+    border-radius: 2px;
+    color: #ecf0f1;
+}
+
+input[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+.submissions {
+    width: 60vw; 
+    max-width: 500px; 
+    min-width: 300px;
+    margin: 0 auto;
+}
+
+#amortization-table {
+    width: 80vw; 
+    max-width: 95%; 
+    min-width: 500px;
+    background-color: #2c3e50;
+    padding: 2em;
+    border-radius: 2em;
+    box-shadow: 0 0 20px #2c3e50;
+    display: none;
+    margin: 2rem auto;
+}
+
+#inputFields {
+    background-color: #2c3e50;
+    padding: 1rem;
+    border-radius: 1rem; 
+    box-shadow: 0 0 20px #2c3e50;
+}
+
+table {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: .25rem;
+}
+
+.tableCell {
+    background-color: #34495e;
+    text-align: right;
+    vertical-align: middle;
+    padding: .5rem;
+    border-radius: .1rem;
+}
+
+#tableHeaderCell {
+    text-align: center;
+}
