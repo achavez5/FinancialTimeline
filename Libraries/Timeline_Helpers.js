@@ -1,21 +1,15 @@
-const NUM_MONTHS_IN_YEAR = 12;
-const ROUNDED_ZERO = round(0.00);
-
-/** HELPERS */
-
-function round(numberToBeRounded, precision = 2) {
-    return Math.round(numberToBeRounded * Math.pow(10, precision)) / Math.pow(10, precision);
-};
+const NUM_MONTHS_IN_YEAR = Helpers.Math.NumMonthsInYear;
+const round = Helpers.Math.Round;
 
 /** CLASS DEFS*/
 
 class amortArrayRecord {
     constructor(loanAmount, interestPayment, payment, principalPayment) {
-        // console.log(`Amort array initialization ${loanAmount, interestPayment, payment, principalPayment }`);
         [this.loanAmount, this.interestPayment, this.payment, this.principalPayment] = [loanAmount, interestPayment, payment, principalPayment];
     }
     getInterestAmount () { return this.interestPayment };
     getPayment () { return this.payment };
+    getLoanAmount () { return this.loanAmount};
     toString () {
         return `\n\tPrincipal Amount: ${round(this.loanAmount)} \n\tInterest Paid: ${round(this.interestPayment)} \n\tPrincipal Paid: ${round(this.principalPayment)} \n\tMonthly payment: ${this.payment}`;
     };
@@ -30,6 +24,11 @@ class amortStats {
         if (amortArr.length > 0) {
             for (let i in amortArr) {
                 record = amortArr[i];
+
+                if (i == 0) {
+                    this.originalLoanBalance = record.getLoanAmount();
+                }
+
                 let recordInterest = record.getInterestAmount();
                 let recordPayment = record.getPayment();
     
@@ -42,7 +41,7 @@ class amortStats {
         this.totalPaid = round(paymentSum);
     }
     toString() {
-        return `Total interest paid: ${this.totalInterestPaid}\n\tTotal paid over the life of the loan: ${this.totalPaid}`;
+    return `Original loan amount: ${this.originalLoanBalance}\n\tTotal paid over the life of the loan: ${this.totalPaid}\n\tTotal interest paid: ${this.totalInterestPaid}`;
     }
 };
 
@@ -73,7 +72,7 @@ function calcAmortArray(loanAmount, interestPercent, paymentAmount) {
             }
 
             amortRecord = new amortArrayRecord(
-                loanAmount > 0 ? loanAmount : ROUNDED_ZERO, 
+                loanAmount > 0 ? loanAmount : 0, 
                 interestAmount, 
                 paymentAmount,
                 principalPayment
@@ -89,25 +88,6 @@ function calcAmortArray(loanAmount, interestPercent, paymentAmount) {
     return array;
 }
 
-// p = principal 
-// i = interest rate / 100
-// n = number of payments per term (normally months in year)
-// t = number of periods (term length is usually measured in years)
-//
-//Formula: 
-//        p * ( i / n )
-// ____________________________
-// 1 - (1 + ( i / n ))^-(n * t)
-//
-function getPaymentAmount(principalPayment, interestRate, termLengthInMonths) {
-    let monthlyInterestRate = (interestRate / 100) / NUM_MONTHS_IN_YEAR; 
-    let numerator = principalPayment * monthlyInterestRate;
-    let denominator = (1.0 - Math.pow(1.0 + monthlyInterestRate, -(termLengthInMonths)));
-    
-    return round(numerator / denominator, 2);
-}
-
-
 function getTimeline(loans) {
     let loan, monthlyPayment, amortArray;
     let timeline = [];
@@ -117,7 +97,7 @@ function getTimeline(loans) {
         for (let i in loans) {
             loan = loans[i];
             let { name, loanAmount, interestRatePercent, termLength } = loan;
-            monthlyPayment = getPaymentAmount(loanAmount, interestRatePercent, termLength);
+            monthlyPayment = Helpers.Math.GetPaymentAmount(loanAmount, interestRatePercent, termLength);
             amortArray = calcAmortArray(loanAmount, interestRatePercent, monthlyPayment);
             let obj = {
                 name: name, 

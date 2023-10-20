@@ -3,11 +3,10 @@ const SPACE_CHAR = ' ';
 const LANG = "en";
 const DEBUG = false;
 const AMORTIZATION_TABLE_HEADERS = ["MONTH", "PAYMENT", "START", "END", "INTEREST", "PRINCIPAL", "TOTAL"];
-const MAX_NUMBER_OF_MONTHS = 360; // sucks if someone wants to take out more than a 30 year loan
-const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-});
+
+// Helpers
+const NUM_MONTHS_IN_YEAR = Helpers.Math.NumMonthsInYear;
+const MAX_NUMBER_OF_MONTHS = Helpers.Math.MaxNumberOfMonthsInTable;
 
 function createTableCell() {
     let tableCell = document.createElement("div");
@@ -33,6 +32,8 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
             table.appendChild(newTableData);
         }
         
+        const formatter = Helpers.Common.FormatToDollar;
+
         createRowData(month); // createRowData(month && month > 0 ? month : "LOAN START"); 
         createRowData(formatter.format(rowPayment || 0));
         createRowData(formatter.format(rowStartingAmount || 0)); 
@@ -79,23 +80,6 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
     amortTableDiv.appendChild(amortTable);
 }
 
-// p = principal 
-// i = interest rate / 100
-// n = number of payments per term (normally months in year)
-// t = number of periods (term length is usually measured in years)
-//
-// Formula: 
-//        p * ( i / n )
-// ____________________________
-// 1 - (1 + ( i / n ))^-(n * t)
-//
-function getPaymentAmount(principalPayment, interestRate, termLengthInMonths) {
-    let monthlyInterestRate = (interestRate / 100) / NUM_MONTHS_IN_YEAR; 
-    let numerator = principalPayment * monthlyInterestRate;
-    let denominator = (1.0 - Math.pow(1.0 + monthlyInterestRate, -(termLengthInMonths)));
-    
-    return Helpers.Math.Round(numerator / denominator, 2);
-}
 // ##### RUN PART #####
 
 Log.Info("Setting submission listener on the Amortization table app.");

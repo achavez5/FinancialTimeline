@@ -1,4 +1,4 @@
-var Log = {};
+let Log = {};
 
 Log.Info = function (printString) 
 {
