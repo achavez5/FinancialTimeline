@@ -17,24 +17,25 @@
 <body>
     <header id="navigation-bar">
         <!-- <a href="../Home Screen/layout.html"><img id="logo" src="../../Images/Heading/favicon.png"></a> -->
-        <a href="../Home Screen/layout.html" id="heading">Amortization Table - Flex</a>
+        <a href="../Home Screen/layout.html" id="heading">Amortization Table</a>
     </header>
     <section class="heading-spacer"><section>
     <form method="post" class="submissions" id="submissions">
         <fieldset class="inputSection" id="inputSection">
             <section id="inputFields">
                 <label id="loan-amount">Loan amount:<input type="number" required name="loan-amount" id="loan-amount" for="loan-amount" min="0" step="0.01" placeholder="100000" value="100000"></label>
+                <label id="term-length">Term length (years):<input type="number" required name="term-length" id="term-length" for="term-length" min="0" step="0.01" placeholder="30" value="30"></label>
                 <label id="payment-amount">Payment amount:<input type="number" required name="payment-amount" id="payment-amount" for="payment-amount" min="0" step="0.01" placeholder="600" value="600"></label>
                 <label id="interest-rate">Interest rate:<input type="number" required name="interest-rate" id="interest-rate" for="interest-rate" min="0" step="0.01" placeholder="4" value="4"k></label>
-                <input type="submit" value="Submit" />
+                <input type="submit" value="Submit"/>
             </section>
         </fieldset>
     </form>
-    <section class="tableSection" id="tableSection">
-        <div id="amortization-table"></div>
-    </section>
-
+    <div id="amortization-table"></div>
+    
+    <script src="../../Libraries/Helpers.js"></script>
     <script src="../../Libraries/Log_Helpers.js"></script>
+    <script src="../../Libraries/Common_Helpers.js"></script>
     <script src="../../Libraries/Math_Helpers.js"></script>
     <script src="./script.js"></script>
 

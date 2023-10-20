@@ -1,45 +1,42 @@
-const NUM_MONTHS_IN_YEAR = 12;
-const SPACE_CHAR = ' '; 
-const LANG = "en";
-const DEBUG = false;
-const AMORTIZATION_TABLE_HEADERS = ["MONTH", "PAYMENT", "STARTING AMOUNT", "ENDING AMOUNT", "INTEREST PAID", "PRINCIPAL PAID", "TOTAL PAID"];
-const MAX_NUMBER_OF_MONTHS = 360; // sucks if someone wants to take out more than a 30 year loan
-const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-});
+const AMORTIZATION_TABLE_HEADERS = ["MONTH", "PAYMENT", "START", "END", "INTEREST", "PRINCIPAL", "TOTAL"];
 
+// Helpers
+const NUM_MONTHS_IN_YEAR = Helpers.Math.NumMonthsInYear;
+const MAX_NUMBER_OF_MONTHS = Helpers.Math.MaxNumberOfMonthsInTable;
+
+function createTableCell() {
+    let tableCell = document.createElement("div");
+    tableCell.setAttribute("class", "tableCell");
+    return tableCell;
+}
 
 // Calculates and returns an array of elements representing months until the loan is paid 
 function createAmortizationTable(startingAmount, payment, interestRate, tableId) {
     // generate header row for the table
-    function getAmortizationTableHeader() {
-        let headerRow = document.createElement("tr");
+    function setAmortizationTableHeader(table) {
         for (let i in AMORTIZATION_TABLE_HEADERS) {
-            let header = document.createElement("th");
+            let header = createTableCell();
+            header.setAttribute("id", "tableHeaderCell");
             header.innerText = AMORTIZATION_TABLE_HEADERS[i];
-            headerRow.appendChild(header);
+            table.appendChild(header);
         }
-        return headerRow;
     }
-    function createAmortTableRow(month, rowPayment, rowStartingAmount, rowEndingAmount, rowInterestPaid, rowPrincipalPaid, totalPaid) { 
+    function createAmortTableRow(month, rowPayment, rowStartingAmount, rowEndingAmount, rowInterestPaid, rowPrincipalPaid, totalPaid, table) { 
         function createRowData(value) {
-            let newTableData = document.createElement("td");
+            let newTableData = createTableCell();
             newTableData.innerText = value;
-            return newTableData;
+            table.appendChild(newTableData);
         }
         
-        let newRow = document.createElement("tr");
+        const formatter = Helpers.Common.FormatToDollar;
 
-        newRow.appendChild(createRowData(month && month > 0 ? month : "LOAN START")); 
-        newRow.appendChild(createRowData(formatter.format(rowPayment || 0)));
-        newRow.appendChild(createRowData(formatter.format(rowStartingAmount || 0))); 
-        newRow.appendChild(createRowData(formatter.format(rowEndingAmount || 0)));
-        newRow.appendChild(createRowData(formatter.format(rowInterestPaid || 0)));
-        newRow.appendChild(createRowData(formatter.format(rowPrincipalPaid || 0)));
-        newRow.appendChild(createRowData(formatter.format(totalPaid || 0)));
-    
-        return newRow;
+        createRowData(month); // createRowData(month && month > 0 ? month : "LOAN START"); 
+        createRowData(formatter.format(rowPayment || 0));
+        createRowData(formatter.format(rowStartingAmount || 0)); 
+        createRowData(formatter.format(rowEndingAmount || 0));
+        createRowData(formatter.format(rowInterestPaid || 0));
+        createRowData(formatter.format(rowPrincipalPaid || 0));
+        createRowData(formatter.format(totalPaid || 0));
     }
     function calculateMonthlyInterest(amount, interestRate) {
         let notRoundedInterest = ((interestRate / 100) / NUM_MONTHS_IN_YEAR) * amount;
@@ -54,13 +51,13 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
 
     // clear the table so that many aren't stacked above each other
     amortTableDiv.innerHTML = "";
-    amortTableDiv.style.display = "block";
+    amortTableDiv.style.display = "block"
 
     // insert the header row
-    amortTable.appendChild(getAmortizationTableHeader());    
+    setAmortizationTableHeader(amortTable);    
 
     // first row after header
-    amortTable.appendChild(createAmortTableRow(null, null, startingAmount, startingAmount, null, null, null));
+    createAmortTableRow(0, null, startingAmount, startingAmount, null, null, null, amortTable);
 
     // generate the rest of the table
     let monthCount = 1;
@@ -71,34 +68,12 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
         let afterPaymentAmount = startingAmount + interestAmount - payment;
         totalPaid += monthPayment;
         
-        let row = createAmortTableRow(monthCount, monthPayment, startingAmount, afterPaymentAmount > 0 ? afterPaymentAmount : 0, interestAmount, principalPayment, totalPaid);
-        amortTable.appendChild(row);
-
+        createAmortTableRow(monthCount, monthPayment, startingAmount, afterPaymentAmount > 0 ? afterPaymentAmount : 0, interestAmount, principalPayment, totalPaid, amortTable);
         startingAmount = afterPaymentAmount;
         monthCount += 1; 
     }
 
     amortTableDiv.appendChild(amortTable);
-
-    return true;
-}
-
-// p = principal 
-// i = interest rate / 100
-// n = number of payments per term (normally months in year)
-// t = number of periods (term length is usually measured in years)
-//
-//Formula: 
-//        p * ( i / n )
-// ____________________________
-// 1 - (1 + ( i / n ))^-(n * t)
-//
-function getPaymentAmount(principalPayment, interestRate, termLengthInMonths) {
-    let monthlyInterestRate = (interestRate / 100) / NUM_MONTHS_IN_YEAR; 
-    let numerator = principalPayment * monthlyInterestRate;
-    let denominator = (1.0 - Math.pow(1.0 + monthlyInterestRate, -(termLengthInMonths)));
-    
-    return Helpers.Math.Round(numerator / denominator, 2);
 }
 
 // ##### RUN PART #####
@@ -117,5 +92,6 @@ form.addEventListener("submit", function (e) {
         dataDict[key] = value;
     }
 
+    // determineToCreateAmortizationTable(dataDict);
     createAmortizationTable(parseFloat(dataDict["loan-amount"]), parseFloat(dataDict["payment-amount"]), parseFloat(dataDict["interest-rate"]), "amortization-table");
 });

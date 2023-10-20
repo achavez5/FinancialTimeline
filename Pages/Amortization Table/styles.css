@@ -5,6 +5,7 @@
 }
 
 .tableSection {
+    padding-top: 25px;
     padding-bottom: 2rem;
 }
 
@@ -18,7 +19,7 @@ label {
     margin: 0.5rem 0;
 }
 
-input {
+input, select {
     margin: 10px 0 0 0;
     width: 100%;
     min-height: 2em;
@@ -49,6 +50,7 @@ input[type="submit"]:hover {
     width: 60vw; 
     max-width: 500px; 
     min-width: 300px;
+    margin: 0 auto;
 }
 
 #amortization-table {
@@ -57,39 +59,33 @@ input[type="submit"]:hover {
     min-width: 500px;
     background-color: #2c3e50;
     padding: 2em;
-    border-radius: 10px;
+    border-radius: 2em;
     box-shadow: 0 0 20px #2c3e50;
     display: none;
-}
-
-.submissions, #amortization-table {
-    margin: 0 auto;
-}
-
-td, th {
-    width: 200rem;
-    background-color: #34495e; 
-    margin: 0;
-}
-
-td {
-    text-align: right;
-}
-
-td:first-of-type, th:first-of-type {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-}
-
-
-td:last-of-type, th:last-of-type {
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    margin: 2rem auto;
 }
 
 #inputFields {
     background-color: #2c3e50;
     padding: 1rem;
-    border-radius: 10px; 
+    border-radius: 1rem; 
     box-shadow: 0 0 20px #2c3e50;
+}
+
+table {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: .25rem;
+}
+
+.tableCell {
+    background-color: #34495e;
+    text-align: right;
+    vertical-align: middle;
+    padding: .5rem;
+    border-radius: .1rem;
+}
+
+#tableHeaderCell {
+    text-align: center;
 }
