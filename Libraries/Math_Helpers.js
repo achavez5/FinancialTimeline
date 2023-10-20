@@ -1,5 +1,5 @@
 Helpers.Math = {
-    Round: function (numberToBeRounded, precision) {
+    Round: function (numberToBeRounded, precision = 2) {
         return Math.round(numberToBeRounded * Math.pow(10, precision)) / Math.pow(10, precision);
     },
     // p = principal 
@@ -13,11 +13,11 @@ Helpers.Math = {
     // 1 - (1 + ( i / n ))^-(n * t)
     //
     GetPaymentAmount: function (principalPayment, interestRate, termLengthInMonths) {
-        let monthlyInterestRate = (interestRate / 100) / NUM_MONTHS_IN_YEAR; 
+        let monthlyInterestRate = (interestRate / 100) / this.NumMonthsInYear; 
         let numerator = principalPayment * monthlyInterestRate;
         let denominator = (1.0 - Math.pow(1.0 + monthlyInterestRate, -(termLengthInMonths)));
-        
-        return Helpers.Math.Round(numerator / denominator, 2);
+
+        return this.Round(numerator / denominator, 2);
     },
     NumMonthsInYear: 12,
     MaxNumberOfMonthsInTable: 360,
