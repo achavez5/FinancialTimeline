@@ -90,3 +90,25 @@ input::-webkit-inner-spin-button {
     top: 0;
 
 }
+
+.links {
+    width: 60vw; 
+    max-width: 500px;
+    min-width: 300px;
+    margin: auto ;
+    padding: 2em 2em;
+    display: block;
+}
+
+label {
+    display: block; 
+}
+
+.links > label > ul {
+    width: 100%; 
+    text-decoration: none;
+    display: block;
+}
+.links > label > ul > li {
+    display: block;
+}
