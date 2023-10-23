@@ -74,7 +74,7 @@ input[type="submit"]:hover {
 
 table {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: 1fr repeat(5, 3fr);
     gap: .25rem;
 }
 
