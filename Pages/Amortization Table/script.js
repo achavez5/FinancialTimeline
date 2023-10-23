@@ -1,4 +1,4 @@
-const AMORTIZATION_TABLE_HEADERS = ["MONTH", "PAYMENT", "START", "END", "INTEREST", "PRINCIPAL", "TOTAL"];
+const AMORTIZATION_TABLE_HEADERS = ["MONTH", "PAYMENT", "BALANCE", "INTEREST", "PRINCIPAL", "TOTAL"];
 
 // Helpers
 const NUM_MONTHS_IN_YEAR = Helpers.Math.NumMonthsInYear;
@@ -21,7 +21,7 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
             table.appendChild(header);
         }
     }
-    function createAmortTableRow(month, rowPayment, rowStartingAmount, rowEndingAmount, rowInterestPaid, rowPrincipalPaid, totalPaid, table) { 
+    function createAmortTableRow(month, rowPayment, rowBalance, rowInterestPaid, rowPrincipalPaid, totalPaid, table) { 
         function createRowData(value) {
             let newTableData = createTableCell();
             newTableData.innerText = value;
@@ -32,8 +32,7 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
 
         createRowData(month); // createRowData(month && month > 0 ? month : "LOAN START"); 
         createRowData(formatter.format(rowPayment || 0));
-        createRowData(formatter.format(rowStartingAmount || 0)); 
-        createRowData(formatter.format(rowEndingAmount || 0));
+        createRowData(formatter.format(rowBalance || 0)); 
         createRowData(formatter.format(rowInterestPaid || 0));
         createRowData(formatter.format(rowPrincipalPaid || 0));
         createRowData(formatter.format(totalPaid || 0));
@@ -57,7 +56,7 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
     setAmortizationTableHeader(amortTable);    
 
     // first row after header
-    createAmortTableRow(0, null, startingAmount, startingAmount, null, null, null, amortTable);
+    createAmortTableRow(0, null, startingAmount, null, null, null, amortTable);
 
     // generate the rest of the table
     let monthCount = 1;
@@ -65,11 +64,11 @@ function createAmortizationTable(startingAmount, payment, interestRate, tableId)
         let interestAmount = calculateMonthlyInterest(startingAmount, interestRate);
         let monthPayment = startingAmount + interestAmount <= payment ? startingAmount + interestAmount : payment; // if starting amount < payment -> we're not going to make a full payment
         let principalPayment = monthPayment - interestAmount;
-        let afterPaymentAmount = startingAmount + interestAmount - payment;
+        let balance = startingAmount + interestAmount - payment;
         totalPaid += monthPayment;
         
-        createAmortTableRow(monthCount, monthPayment, startingAmount, afterPaymentAmount > 0 ? afterPaymentAmount : 0, interestAmount, principalPayment, totalPaid, amortTable);
-        startingAmount = afterPaymentAmount;
+        createAmortTableRow(monthCount, monthPayment, balance > 0 ? balance : 0, interestAmount, principalPayment, totalPaid, amortTable);
+        startingAmount = balance;
         monthCount += 1; 
     }
 
